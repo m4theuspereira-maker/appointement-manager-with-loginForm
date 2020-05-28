@@ -6,9 +6,12 @@ import javax.validation.Valid;
 
 import com.webencyclop.demo.model.Appointment;
 import com.webencyclop.demo.model.Invited;
+import com.webencyclop.demo.model.User;
 import com.webencyclop.demo.repository.InvitedRepository;
+import com.webencyclop.demo.repository.UserRepository;
 import com.webencyclop.demo.service.AppointmentService;
 import com.webencyclop.demo.service.InvitedService;
+import com.webencyclop.demo.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +25,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class AppointmentController {
     @Autowired
+    UserRepository userRepository;
+    @Autowired
+    UserService userService; 
+    @Autowired
     AppointmentService appointService;
     @Autowired
     InvitedService invitService;
@@ -34,10 +41,12 @@ public class AppointmentController {
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ModelAndView listAll(Appointment appointment) {
+    public ModelAndView listAll(Appointment appointment, User user) {
         ModelAndView mv = new ModelAndView("appointmentsList");
+        appointment = userRepository.findByUserId(appointment.getUserID()); 
         List<Appointment> appointments = appointService.findAll();
         mv.addObject("appointments", appointments);
+        mv.addObject("user", user); 
         return mv;
     }
 
@@ -47,6 +56,8 @@ public class AppointmentController {
             attributes.addFlashAttribute("message", "Please, check all fields!");
             return "redirect:/new";
         }
+
+        userService.saveAppointmentUser(appointment);
         appointService.save(appointment);
         attributes.addFlashAttribute("messageSuccess", "Appointment saved with success!");
         return "redirect:/new";
@@ -55,6 +66,7 @@ public class AppointmentController {
     @RequestMapping(value = "details/{id}", method = RequestMethod.GET)
     public ModelAndView Details(@PathVariable("id") long id) {
         Appointment appointment = appointService.findById(id);
+
         ModelAndView mv = new ModelAndView("appointmentDetails");
         Iterable<Invited> inviteds = invitRepository.findByAppointment(appointment);
         mv.addObject("appointment", appointment);

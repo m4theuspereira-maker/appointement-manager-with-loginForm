@@ -7,8 +7,8 @@ import com.webencyclop.demo.repository.AppointmentRepository;
 import com.webencyclop.demo.service.AppointmentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import org.springframework.stereotype.Service;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
@@ -17,18 +17,20 @@ public class AppointmentServiceImpl implements AppointmentService {
     AppointmentRepository repository;
 
     @Override
-    public List<Appointment> findAll() {     
-        
+    public List<Appointment> findAll() {
+
         return repository.findAll();
     }
 
     @Override
-    public Appointment findById(long id) {        
+    public Appointment findById(long id) {
+
         return repository.findById(id).get();
     }
 
     @Override
-    public Appointment save(Appointment appointment) {      
+    public Appointment save(Appointment appointment) {
+        
         return repository.save(appointment);
     }
 
@@ -36,5 +38,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     public void delete(long id) {
         repository.deleteById(id);
     }
+
+
+   
+
+   
 
 }
