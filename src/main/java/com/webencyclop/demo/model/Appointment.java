@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -33,17 +34,16 @@ public class Appointment {
     private List<Invited> inited;
 
     @ManyToOne
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private User userID;
+    @JoinColumn(name ="User_id") //foreing key name
+    private User user;
 
-    public User getUserID() {
-        return this.userID;
+    public User getUser() {
+        return this.user;
     }
 
-    public void setUserID(User userID) {
-        this.userID = userID;
-    } 
-
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getNameAppointment() {
         return this.nameAppointment;

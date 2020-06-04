@@ -1,5 +1,6 @@
 package com.webencyclop.demo.controller;
 
+
 import javax.validation.Valid;
 
 import com.webencyclop.demo.model.User;
@@ -12,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 
 
@@ -56,5 +59,18 @@ public class AuthenticationController {
             modelAndView.addObject("user", new User());
             modelAndView.setViewName("register");
         return modelAndView;
+        
     }    
+
+    @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
+    public String redirect(RedirectAttributes attributes){
+         return "redirect:/list"; 
+    }
+
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    public String logout(RedirectAttributes redirct){
+        return "redirect:/login";
+    }
+
+   
 }

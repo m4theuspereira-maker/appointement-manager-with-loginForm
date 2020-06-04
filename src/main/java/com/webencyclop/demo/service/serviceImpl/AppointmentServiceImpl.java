@@ -2,8 +2,11 @@ package com.webencyclop.demo.service.serviceImpl;
 
 import java.util.List;
 
+
 import com.webencyclop.demo.model.Appointment;
+
 import com.webencyclop.demo.repository.AppointmentRepository;
+import com.webencyclop.demo.repository.UserRepository;
 import com.webencyclop.demo.service.AppointmentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
 
+    @Autowired
+    UserRepository UserRepository;
     @Autowired
     AppointmentRepository repository;
 
@@ -30,7 +35,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Appointment save(Appointment appointment) {
-        
+
         return repository.save(appointment);
     }
 
@@ -39,6 +44,19 @@ public class AppointmentServiceImpl implements AppointmentService {
         repository.deleteById(id);
     }
 
+    @Override
+    public List<Appointment> findByUser_id(int userId) {
+        // TODO Auto-generated method stub
+        return repository.findByUser_id(userId);
+    }
+
+  
+   
+
+   
+
+   
+    
 
    
 

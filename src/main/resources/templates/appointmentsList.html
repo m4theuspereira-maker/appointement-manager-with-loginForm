@@ -47,6 +47,7 @@
             <th>Delete</th>
         </thead>
         <tbody>
+
             <tr th:each="appointment: ${appointments}">
                 <td>
                     <a th:href="@{details/{id}(id=${appointment.id})}"><span
@@ -58,7 +59,9 @@
             </tr>
         </tbody>
     </table>
-
+    <div>
+       
+  </div>
 </body>
 
 </html>

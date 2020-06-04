@@ -14,6 +14,8 @@ import com.webencyclop.demo.service.InvitedService;
 import com.webencyclop.demo.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +29,7 @@ public class AppointmentController {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    UserService userService; 
+    UserService userService;
     @Autowired
     AppointmentService appointService;
     @Autowired
@@ -41,23 +43,29 @@ public class AppointmentController {
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ModelAndView listAll(Appointment appointment, User user) {
-        ModelAndView mv = new ModelAndView("appointmentsList");
-        appointment = userRepository.findByUserId(appointment.getUserID()); 
-        List<Appointment> appointments = appointService.findAll();
+    public ModelAndView listAll(Appointment appointment) {
+        ModelAndView mv = new ModelAndView("appointmentsList");    
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();        
+        User user = userRepository.findByEmail(currentPrincipalName.toString());        
+        List<Appointment> appointments = appointService.findByUser_id(user.getId());
+        
         mv.addObject("appointments", appointments);
-        mv.addObject("user", user); 
+        // mv.addObject("user", user);
         return mv;
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public String postAppmt(@Valid Appointment appointment, BindingResult result, RedirectAttributes attributes) {
+    public String postAppmt(@Valid Appointment appointment, User user, BindingResult result,
+            RedirectAttributes attributes) {
         if (result.hasErrors()) {
             attributes.addFlashAttribute("message", "Please, check all fields!");
             return "redirect:/new";
         }
-
-        userService.saveAppointmentUser(appointment);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();        
+        user = userRepository.findByEmail(currentPrincipalName.toString());
+        appointment.setUser(user);
         appointService.save(appointment);
         attributes.addFlashAttribute("messageSuccess", "Appointment saved with success!");
         return "redirect:/new";
@@ -95,10 +103,12 @@ public class AppointmentController {
     }
 
     @RequestMapping(value = "/details/remove/{id}", method = RequestMethod.GET)
-    public String removeInvited(@PathVariable("id") long id, Appointment appt, Invited invited, RedirectAttributes attributes) {
+    public String removeInvited(@PathVariable("id") long id, Appointment appt, Invited invited,
+            RedirectAttributes attributes) {
         invitService.delete(id);
         attributes.addFlashAttribute("message", "Invited removed with success!");
         return "redirect:/list";
     }
 
+    
 }

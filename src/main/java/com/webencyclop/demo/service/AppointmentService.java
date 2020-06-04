@@ -5,6 +5,7 @@ import java.util.List;
 import com.webencyclop.demo.model.Appointment;
 
 
+
 public interface AppointmentService {
 
     List<Appointment> findAll(); 
@@ -15,6 +16,9 @@ public interface AppointmentService {
 
     void delete(long id); 
 
+    List<Appointment> findByUser_id(int userId);
+
+     
     
 
 }

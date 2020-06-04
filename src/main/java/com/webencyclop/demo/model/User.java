@@ -54,17 +54,18 @@ public class User {
     inverseJoinColumns = @JoinColumn(name = "auth_role_id"))
     private Set<Role> roles;
 
-    @OneToMany
-    private List<Appointment> IdAppointments;
+    @OneToMany(mappedBy = "user") //link with appointment attribute 
+    private List<Appointment> appointments;
 
-    public List<Appointment> getIdAppointments() {
-        return this.IdAppointments;
+    public List<Appointment> getAppointments() {
+        return this.appointments;
     }
 
-    public void setIdAppointments(List<Appointment> IdAppointments) {
-        this.IdAppointments = IdAppointments;
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
 
+    
     public Set<Role> getRoles() {
         return this.roles;
     }

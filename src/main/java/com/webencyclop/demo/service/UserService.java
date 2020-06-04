@@ -1,6 +1,7 @@
 package com.webencyclop.demo.service;
 
-import com.webencyclop.demo.model.Appointment;
+
+
 import com.webencyclop.demo.model.User;
 
 
@@ -10,6 +11,7 @@ public interface UserService {
 
     boolean isUserAlreadyPresent(User user); 
 
-    void saveAppointmentUser(Appointment appointment); 
+    
+   
     
 }
